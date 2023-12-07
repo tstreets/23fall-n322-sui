@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Loader, Image } from 'semantic-ui-react';
+import { Loader, Image, Header, Grid } from 'semantic-ui-react';
 
 export default function PokemonName() {
-  const [pokemonInfo, setPokemonInfo] = React.useState({ loading: true });
+  const [pokemonInfo, setPokemonInfo] = React.useState({ loading: true, stats: [] });
   const router = useRouter();
 
   React.useEffect(function () {
@@ -14,11 +14,36 @@ export default function PokemonName() {
         .then(function (r) {
           setPokemonInfo(r);
         })
-        .catch((e) => setPokemonInfo({ loading: false, name: router.query.name }));
+        .catch((e) => setPokemonInfo({ loading: false, name: router.query.name, stats: [] }));
     }
   });
 
+  console.log(pokemonInfo);
+
   // console.log(router.query);
+
+  const pokemonStats =
+    pokemonInfo.stats.length === 0
+      ? []
+      : pokemonInfo.stats.map((stat) => {
+          return (
+            <Grid.Column key={stat.stat.name}>
+              <Header as='h3'>{stat.stat.name}</Header>
+              <p>{stat.base_stat}</p>
+            </Grid.Column>
+          );
+        });
+
+  /*
+  {
+    "base_stat": 40,
+    "effort": 0,
+      "stat": {
+          "name": "hp",
+          "url": "https://pokeapi.co/api/v2/stat/1/"
+      }
+  }
+  */
 
   return (
     <>
@@ -30,6 +55,7 @@ export default function PokemonName() {
           // then do this; true
           <>
             <Image src={pokemonInfo.sprites.front_default}></Image>
+            <Grid columns='3'>{pokemonStats}</Grid>
           </>
         ) : (
           // else do this; false
