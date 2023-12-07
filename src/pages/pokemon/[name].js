@@ -35,7 +35,7 @@ export default function PokemonName() {
         });
 
   /*
-  {
+  const stat = {
     "base_stat": 40,
     "effort": 0,
       "stat": {
